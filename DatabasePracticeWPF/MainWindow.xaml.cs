@@ -25,12 +25,24 @@ namespace DatabasePracticeWPF
         public MainWindow()
         {
             InitializeComponent();
-            cn = new OleDbConnection( "Provider = Microsoft.ACE.OLEDB.12.0; Data Source =| DataDirectory |..\\EmployeesAndAssets.accdb" );
+            
+            cn = new OleDbConnection("Provider = Microsoft.ACE.OLEDB.12.0; Data Source =|DataDirectory|\\EmployeesAndAssets.accdb");
+            
+            
         }
 
         private void seeAssets_Click(object sender, RoutedEventArgs e)
         {
-
+            string query = "select * from Assets";
+            OleDbCommand cmd = new OleDbCommand(query, cn);
+            cn.Open();
+            OleDbDataReader read = cmd.ExecuteReader();
+            string data = "";
+            while (read.Read())
+            {
+                data += read[0].ToString() + "\n";
+                textDisplay.Text = data;
+            }
         }
     }
 }
