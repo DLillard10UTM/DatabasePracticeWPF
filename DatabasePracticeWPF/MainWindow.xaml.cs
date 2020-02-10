@@ -27,22 +27,49 @@ namespace DatabasePracticeWPF
             InitializeComponent();
             
             cn = new OleDbConnection("Provider = Microsoft.ACE.OLEDB.12.0; Data Source =|DataDirectory|\\EmployeesAndAssets.accdb");
-            
-            
         }
 
         private void seeAssets_Click(object sender, RoutedEventArgs e)
         {
-            string query = "select * from Assets";
+            string query = "SELECT * FROM Assets";
             OleDbCommand cmd = new OleDbCommand(query, cn);
             cn.Open();
             OleDbDataReader read = cmd.ExecuteReader();
             string data = "";
             while (read.Read())
             {
-                data += read[0].ToString() + "\n";
-                textDisplay.Text = data;
+                //FieldCount allows us to work the loop off of the Access database.
+                for(int i = 0; i < read.FieldCount; i++)
+                {
+                    // i is repesenting col number here.
+                    data += read[i].ToString() + " ";
+                }
+                data += "\n";
             }
+            AssetDisplay.Text = data;
+            cn.Close();
+        }
+
+        //Button press for employee text, will show the text for employees.
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            string query = "SELECT * FROM Employees";
+            OleDbCommand cmd = new OleDbCommand(query, cn);
+            cn.Open();
+            OleDbDataReader read = cmd.ExecuteReader();
+            string data = "";
+            while (read.Read())
+            {
+                //FieldCount allows us to work the loop off of the Access database.
+                for (int i = 0; i < read.FieldCount; i++)
+                {
+                    // i is repesenting col number here.
+                    data += read[i].ToString() + " ";
+                }
+                data += "\n";
+            }
+            EmployeeDisplay.Text = data;
+            cn.Close();
         }
     }
 }
